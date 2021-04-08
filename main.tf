@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 
-#Creating a aws_VPC 
+#Creating an aws_VPC 
 
 resource "aws_vpc" "testing" { 
   #we can create the cidr_block in any required region according to our wish 
@@ -23,7 +23,7 @@ resource "aws_vpc" "testing" {
 }
 
 
-# creating a aws_subnet
+# creating an aws_subnet
 resource "aws_subnet" "testing_sub" {
   #count = length(var.CIDRS)  
   count = "${var.env == "prod" ? 3:1}"
@@ -38,7 +38,7 @@ resource "aws_subnet" "testing_sub" {
   }
 }
 
-#creating a aws_internet_gateway
+#creating an aws_internet_gateway
 resource "aws_internet_gateway" "testing_gateway" {
   vpc_id = "${aws_vpc.testing.id}"
 
@@ -47,7 +47,7 @@ resource "aws_internet_gateway" "testing_gateway" {
   }
 }
 
-#creating a aws_routetable
+#creating an aws_routetable
 resource "aws_route_table" "routetesting" {
   vpc_id = "${aws_vpc.testing.id}"
 
@@ -61,7 +61,7 @@ resource "aws_route_table" "routetesting" {
   }
 }
 
-#creating a aws_route_table_association
+#creating an aws_route_table_association
 resource "aws_route_table_association" "routetesting_ass" { 
   count = "${length(aws_subnet.testing_sub)}"  
   subnet_id      = "${element(aws_subnet.testing_sub.*.id,count.index)}"
@@ -70,7 +70,7 @@ resource "aws_route_table_association" "routetesting_ass" {
 }
 
 
-#creaying aws_security_group
+#creating aws_security_group
 resource "aws_security_group" "allow_tls" {
   name        = "Allow_all"
   description = "Allow TLS inbound traffic"
